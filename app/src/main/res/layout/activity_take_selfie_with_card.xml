@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TakeSelfieWithCardActivity">
+    tools:context=".activity.TakeSelfieWithCardActivity">
 
-    <com.github.esabook.idcardsubmission.CameraPreviewSurface
+    <com.github.esabook.idcardsubmission.view.CameraPreviewSurface
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/camera" />

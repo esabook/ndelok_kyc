@@ -1,4 +1,4 @@
-package com.github.esabook.idcardsubmission;
+package com.github.esabook.idcardsubmission.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,6 +6,8 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.github.esabook.idcardsubmission.R;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 

@@ -1,4 +1,4 @@
-package com.github.esabook.idcardsubmission;
+package com.github.esabook.idcardsubmission.view;
 
 import android.content.Context;
 import android.hardware.Camera;
@@ -7,7 +7,12 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.github.esabook.idcardsubmission.CameraUtils;
+import com.github.esabook.idcardsubmission.analyzer.AnalyzerBase;
+
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.github.esabook.idcardsubmission.CameraUtils.getCameraInstance;
 
@@ -18,6 +23,15 @@ public class CameraPreviewSurface extends SurfaceView implements SurfaceHolder.C
     private int CAMERA_ORIENTATION = 90;
     private SurfaceHolder mHolder;
     private Camera mCamera;
+
+    private List<AnalyzerBase> analyzer = new ArrayList<>();
+//
+//    public int WIDTH_CROP_PERCENT = 8;
+//    public int HEIGHT_CROP_PERCENT = 74;
+
+    public List<AnalyzerBase> getAnalyzer() {
+        return analyzer;
+    }
 
 
     public CameraPreviewSurface(Context context) {
@@ -38,7 +52,9 @@ public class CameraPreviewSurface extends SurfaceView implements SurfaceHolder.C
         mHolder.addCallback(this);
         // deprecated setting, but required on Android versions prior to 3.0
         mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+        mHolder.setKeepScreenOn(true);
     }
+
 
 
     public void startPreview() {
@@ -50,6 +66,7 @@ public class CameraPreviewSurface extends SurfaceView implements SurfaceHolder.C
 
                 // The Surface has been created, now tell the camera where to draw the preview.
                 try {
+
                     mCamera.setPreviewDisplay(mHolder);
                     mCamera.setDisplayOrientation(CAMERA_ORIENTATION);
                     mCamera.startPreview();
@@ -67,24 +84,79 @@ public class CameraPreviewSurface extends SurfaceView implements SurfaceHolder.C
         cp.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
 
         mCamera.setParameters(cp);
-        mCamera.setFaceDetectionListener(new Camera.FaceDetectionListener() {
+//        mCamera.setFaceDetectionListener(new Camera.FaceDetectionListener() {
+//            @Override
+//            public void onFaceDetection(Camera.Face[] faces, Camera camera) {
+//
+//                Log.d(TAG, "Face total: " + String.valueOf(faces.length));
+//
+//                for (Camera.Face f : faces) {
+//                    Log.d(TAG, "Face score: " + String.valueOf(f.score));
+//                }
+//            }
+//        });
+
+        mCamera.setPreviewCallback(new Camera.PreviewCallback() {
             @Override
-            public void onFaceDetection(Camera.Face[] faces, Camera camera) {
+            public void onPreviewFrame(byte[] data, Camera camera) {
+                // send preview data to subscriber
+                for (AnalyzerBase p : getAnalyzer())
+                    p.analyze(data, camera, CAMERA_ORIENTATION);
 
-                Log.d(TAG, "Face total: " + String.valueOf(faces.length));
-
-                for (Camera.Face f : faces) {
-                    Log.d(TAG, "Face score: " + String.valueOf(f.score));
-                }
             }
         });
+
     }
+
+
+//    private void drawOverlay(SurfaceHolder holder) {
+//        Canvas canvas = holder.lockCanvas();
+//        Paint bgPaint = new Paint();
+//        bgPaint.setAlpha(140);
+//
+//        canvas.drawPaint(bgPaint);
+//        Paint rectPaint = new Paint();
+//        rectPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+//        rectPaint.setStyle(Paint.Style.FILL);
+//        rectPaint.setColor(Color.WHITE);
+//        Paint outlinePaint = new Paint();
+//        outlinePaint.setStyle(Paint.Style.STROKE);
+//        outlinePaint.setColor(Color.WHITE);
+//        outlinePaint.setStrokeWidth(4f);
+//        int surfaceWidth = holder.getSurfaceFrame().width();
+//        int surfaceHeight = holder.getSurfaceFrame().height();
+//
+//        float cornerRadius = 25f;
+//        // Set rect centered in frame
+//        float rectTop = surfaceHeight * HEIGHT_CROP_PERCENT / 2 / 100f;
+//        float rectLeft = surfaceWidth * WIDTH_CROP_PERCENT / 2 / 100f;
+//        float rectRight = surfaceWidth * (1 - WIDTH_CROP_PERCENT / 2 / 100f);
+//        float rectBottom = surfaceHeight * (1 - HEIGHT_CROP_PERCENT / 2 / 100f);
+//        RectF rect = new RectF(rectLeft, rectTop, rectRight, rectBottom);
+//        canvas.drawRoundRect(
+//                rect, cornerRadius, cornerRadius, rectPaint
+//        );
+//        canvas.drawRoundRect(
+//                rect, cornerRadius, cornerRadius, outlinePaint
+//        );
+//        Paint textPaint = new Paint();
+//        textPaint.setColor(Color.WHITE);
+//        textPaint.setTextSize(50F);
+//
+//        String overlayText = "Overlay help";
+//        Rect textBounds = new Rect();
+//        textPaint.getTextBounds(overlayText, 0, overlayText.length(), textBounds);
+//        float textX = (surfaceWidth - textBounds.width()) / 2f;
+//        float textY = rectBottom + textBounds.height() + 15f ;// put text below rect and 15f padding
+//        canvas.drawText("Overlay Help", textX, textY, textPaint);
+//        holder.unlockCanvasAndPost(canvas);
+//    }
 
     //region Surface Holder
 
 
     public void surfaceCreated(SurfaceHolder holder) {
-
+//        drawOverlay(holder);
     }
 
     public void surfaceDestroyed(SurfaceHolder holder) {
@@ -114,11 +186,12 @@ public class CameraPreviewSurface extends SurfaceView implements SurfaceHolder.C
         try {
             mCamera.setPreviewDisplay(mHolder);
             mCamera.startPreview();
-            mCamera.startFaceDetection();
+//            mCamera.startFaceDetection();
         } catch (Exception e) {
             Log.d(TAG, "Error starting camera preview: " + e.getMessage());
         }
     }
+
 
     //endregion
 }
