@@ -73,6 +73,10 @@ public class TakeCardActivity extends AppCompatActivity {
 
         mPreview.getAnalyzer().add(textAnalyzer);
 
+        initIndicatorOverlay();
+    }
+
+    void initIndicatorOverlay() {
         mOverlay.setZOrderOnTop(true);
         mOverlay.getHolder().setFormat(PixelFormat.TRANSPARENT);
         mOverlay.getHolder().addCallback(new SurfaceHolder.Callback() {
