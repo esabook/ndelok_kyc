@@ -109,49 +109,6 @@ public class CameraPreviewSurface extends SurfaceView implements SurfaceHolder.C
     }
 
 
-//    private void drawOverlay(SurfaceHolder holder) {
-//        Canvas canvas = holder.lockCanvas();
-//        Paint bgPaint = new Paint();
-//        bgPaint.setAlpha(140);
-//
-//        canvas.drawPaint(bgPaint);
-//        Paint rectPaint = new Paint();
-//        rectPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
-//        rectPaint.setStyle(Paint.Style.FILL);
-//        rectPaint.setColor(Color.WHITE);
-//        Paint outlinePaint = new Paint();
-//        outlinePaint.setStyle(Paint.Style.STROKE);
-//        outlinePaint.setColor(Color.WHITE);
-//        outlinePaint.setStrokeWidth(4f);
-//        int surfaceWidth = holder.getSurfaceFrame().width();
-//        int surfaceHeight = holder.getSurfaceFrame().height();
-//
-//        float cornerRadius = 25f;
-//        // Set rect centered in frame
-//        float rectTop = surfaceHeight * HEIGHT_CROP_PERCENT / 2 / 100f;
-//        float rectLeft = surfaceWidth * WIDTH_CROP_PERCENT / 2 / 100f;
-//        float rectRight = surfaceWidth * (1 - WIDTH_CROP_PERCENT / 2 / 100f);
-//        float rectBottom = surfaceHeight * (1 - HEIGHT_CROP_PERCENT / 2 / 100f);
-//        RectF rect = new RectF(rectLeft, rectTop, rectRight, rectBottom);
-//        canvas.drawRoundRect(
-//                rect, cornerRadius, cornerRadius, rectPaint
-//        );
-//        canvas.drawRoundRect(
-//                rect, cornerRadius, cornerRadius, outlinePaint
-//        );
-//        Paint textPaint = new Paint();
-//        textPaint.setColor(Color.WHITE);
-//        textPaint.setTextSize(50F);
-//
-//        String overlayText = "Overlay help";
-//        Rect textBounds = new Rect();
-//        textPaint.getTextBounds(overlayText, 0, overlayText.length(), textBounds);
-//        float textX = (surfaceWidth - textBounds.width()) / 2f;
-//        float textY = rectBottom + textBounds.height() + 15f ;// put text below rect and 15f padding
-//        canvas.drawText("Overlay Help", textX, textY, textPaint);
-//        holder.unlockCanvasAndPost(canvas);
-//    }
-
     //region Surface Holder
 
 
