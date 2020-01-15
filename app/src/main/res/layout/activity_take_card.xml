@@ -16,17 +16,5 @@
         android:layout_height="match_parent"
         android:id="@+id/overlay" />
 
-    <!--    <FrameLayout-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="200dp"-->
-    <!--        android:id="@+id/marker"-->
-    <!--        android:background="@drawable/marker_take_card"-->
-    <!--        android:layout_margin="40dp"-->
-    <!--        app:layout_constraintLeft_toLeftOf="@id/camera"-->
-    <!--        app:layout_constraintRight_toRightOf="@id/camera"-->
-    <!--        app:layout_constraintTop_toTopOf="@id/camera"-->
-    <!--        app:layout_constraintBottom_toBottomOf="@id/camera"-->
-    <!--        />-->
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

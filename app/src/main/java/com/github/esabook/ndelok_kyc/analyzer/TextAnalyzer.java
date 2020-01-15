@@ -6,6 +6,7 @@ import android.hardware.Camera;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
+import com.github.esabook.ndelok_kyc.RegionSpec;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -21,21 +22,16 @@ public class TextAnalyzer extends AnalyzerBase<FirebaseVisionText> {
     public final String TAG = TextAnalyzer.class.getSimpleName();
 
     MutableLiveData<String> mResult;
-    int widthCropPercent;
-    int heightCropPercent;
+    RegionSpec mMarkerSpec;
 
     private FirebaseVisionTextRecognizer detector = FirebaseVision.getInstance().getOnDeviceTextRecognizer();
     // Flag to skip analyzing new available frames until previous analysis has finished.
     private boolean isBusy = false;
 
 
-    public TextAnalyzer(MutableLiveData<String> result,
-                        int widthCropPercent,
-                        int heightCropPercent) {
+    public TextAnalyzer(MutableLiveData<String> result, RegionSpec markerSpec) {
         this.mResult = result;
-        this.widthCropPercent = widthCropPercent;
-        this.heightCropPercent = heightCropPercent;
-
+        this.mMarkerSpec = markerSpec;
     }
 
 
@@ -58,10 +54,15 @@ public class TextAnalyzer extends AnalyzerBase<FirebaseVisionText> {
                     .setRotation(degrees)
                     .build();
             Bitmap bitmap = FirebaseVisionImage.fromByteArray(mediaImage, metadata).getBitmap();
-            int croppedWidth = (int) (bitmap.getWidth() * (1 - widthCropPercent / 100f));
-            int croppedHeight = (int) (bitmap.getHeight() * (1 - heightCropPercent / 100f));
+            int croppedWidth = (int) (bitmap.getWidth() * (1 - mMarkerSpec.WIDTH_CROP_PERCENT / 100f));
+            int croppedHeight = (int) (bitmap.getHeight() * (1 - mMarkerSpec.HEIGHT_CROP_PERCENT / 100f));
             int x = (bitmap.getWidth() - croppedWidth) / 2;
             int y = (bitmap.getHeight() - croppedHeight) / 2;
+
+            // add vertical offset
+            float VOffset = bitmap.getHeight() / 2 * mMarkerSpec.VERTICAL_OFFSET_PERCENT / 100f;
+            y += VOffset;
+
             Bitmap cropBmp = Bitmap.createBitmap(bitmap, x, y, croppedWidth, croppedHeight);
 
 //            Log.d(TAG, String.format("Bitmap len: %s\nCropped W: %s\nCropped H: %s\nW-CW : 2: %s\nH-CH : 2: %s",

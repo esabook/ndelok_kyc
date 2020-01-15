@@ -24,6 +24,8 @@ public class CameraPreviewSurface extends SurfaceView implements SurfaceHolder.C
     private SurfaceHolder mHolder;
     private Camera mCamera;
 
+    private int mCameraId = Camera.CameraInfo.CAMERA_FACING_BACK;
+
     private List<AnalyzerBase> analyzer = new ArrayList<>();
 //
 //    public int WIDTH_CROP_PERCENT = 8;
@@ -56,10 +58,22 @@ public class CameraPreviewSurface extends SurfaceView implements SurfaceHolder.C
     }
 
 
+    public void switchCameraMode() {
+        mCameraId = mCameraId == Camera.CameraInfo.CAMERA_FACING_BACK ?
+                Camera.CameraInfo.CAMERA_FACING_FRONT :
+                Camera.CameraInfo.CAMERA_FACING_BACK;
+        if (mCamera != null) {
+            mCamera.stopPreview();
+            mCamera.setPreviewCallback(null);
+            mCamera.release();
+        }
+
+        startPreview();
+    }
 
     public void startPreview() {
         if (CameraUtils.checkCameraHardware(this.getContext())) {
-            mCamera = getCameraInstance();
+            mCamera = getCameraInstance(mCameraId);
 
             if (mCamera != null) {
                 initCameraConfig();
