@@ -17,17 +17,13 @@
         android:layout_height="match_parent"
         android:id="@+id/overlay" />
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/marker"
-        android:src="@drawable/marker_take_selfie_with_card"
-        android:layout_margin="40dp"
-        app:layout_constraintLeft_toLeftOf="@id/camera"
-        app:layout_constraintRight_toRightOf="@id/camera"
-        app:layout_constraintTop_toTopOf="@id/camera"
-        app:layout_constraintBottom_toBottomOf="@id/camera"
-        />
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/switch_camera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Switch Camera"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

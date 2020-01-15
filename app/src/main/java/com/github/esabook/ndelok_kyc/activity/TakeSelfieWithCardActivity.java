@@ -12,13 +12,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.widget.ImageView;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
 import com.github.esabook.ndelok_kyc.R;
+import com.github.esabook.ndelok_kyc.RegionSpec;
 import com.github.esabook.ndelok_kyc.analyzer.AnalyzerTaskListener;
 import com.github.esabook.ndelok_kyc.analyzer.FaceAnalyzer;
 import com.github.esabook.ndelok_kyc.analyzer.TextAnalyzer;
@@ -35,15 +38,72 @@ public class TakeSelfieWithCardActivity extends AppCompatActivity {
     CameraPreviewSurface mPreview;
     private SurfaceView mOverlay;
     private SurfaceHolder mOverlayHolder;
-    private ImageView mMarker;
+    private Button mSwitchCamera;
+//    private ImageView mMarker;
 
-    private boolean isCardDetected;
-    private boolean isFaceDetected;
+    private MutableLiveData<Boolean> isCardDetected = new MutableLiveData<>();
+    private MutableLiveData<Boolean> isFaceDetected = new MutableLiveData<>();
+    private MutableLiveData<String> textResult = new MutableLiveData<>();
+
+    RegionSpec mFaceMarkerRegion = new RegionSpec(40, 60, -20, 0);
+    RegionSpec mCardMarkerRegion = new RegionSpec(60, 85, 40, 0);
+
+    Observer<Boolean> detectorObserver = new Observer<Boolean>() {
+        @Override
+        public void onChanged(Boolean aBoolean) {
+            drawOverlay(mOverlayHolder);
+        }
+    };
+
+    AnalyzerTaskListener<FirebaseVisionText> textAnalyzerListener = new AnalyzerTaskListener<FirebaseVisionText>() {
+        @Override
+        public void successed(FirebaseVisionText var1) {
+            Log.i(TAG, "DETEXTED TEXT: " + var1.getText());
+            isCardDetected.setValue(!var1.getText().isEmpty() && var1.getText().length() > 15);
+        }
+
+        @Override
+        public void failed(Exception e) {
+            Log.i(TAG, "FAILED THROW: " + e.getMessage());
+            isCardDetected.setValue(false);
+        }
+
+        @Override
+        public void completed() {
+            Log.i(TAG, "COMPLETED");
+            drawOverlay(mOverlayHolder);
+        }
+    };
 
 
+    AnalyzerTaskListener<List<FirebaseVisionFace>> faceAnalyzerListener = new AnalyzerTaskListener<List<FirebaseVisionFace>>() {
+        @Override
+        public void successed(List<FirebaseVisionFace> var1) {
+            Log.i(TAG, "DETECTED FACE: " + var1.size());
+            isFaceDetected.setValue(!var1.isEmpty());
+        }
 
-    public int WIDTH_CROP_PERCENT_FACE = 8;
-    public int HEIGHT_CROP_PERCENT_FACE = 50;
+        @Override
+        public void failed(Exception e) {
+            Log.i(TAG, "FAILED THROW: " + e.getMessage());
+            isFaceDetected.setValue(false);
+        }
+
+        @Override
+        public void completed() {
+            Log.i(TAG, "COMPLETED");
+//                mMarker.getDrawable().setColorFilter(
+//                        isFaceDetected ? Color.GREEN : Color.RED,
+//                        PorterDuff.Mode.SRC_ATOP);
+        }
+    };
+
+    View.OnClickListener clickSwitchButtonCameraMode = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            mPreview.switchCameraMode();
+        }
+    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,61 +111,23 @@ public class TakeSelfieWithCardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_take_selfie_with_card);
         mOverlay = findViewById(R.id.overlay);
         mPreview = findViewById(R.id.camera);
-        mMarker = findViewById(R.id.marker);
+        mSwitchCamera = findViewById(R.id.switch_camera);
+
+        mSwitchCamera.setOnClickListener(clickSwitchButtonCameraMode);
+
         mPreview.startPreview();
 
-        MutableLiveData<String> result = new MutableLiveData<>();
-        final TextAnalyzer textAnalyzer = new TextAnalyzer(
-                result,
-                HEIGHT_CROP_PERCENT_FACE,
-                WIDTH_CROP_PERCENT_FACE);
+        isCardDetected.setValue(false);
+        isFaceDetected.setValue(false);
+        isCardDetected.observe(this, detectorObserver);
+        isFaceDetected.observe(this, detectorObserver);
 
-        textAnalyzer.setTaskListener(new AnalyzerTaskListener<FirebaseVisionText>() {
-            @Override
-            public void successed(FirebaseVisionText var1) {
-                Log.i(TAG, "DETEXTED TEXT: " + var1.getText());
-                isCardDetected = !var1.getText().isEmpty() && var1.getText().length() > 15;
-            }
-
-            @Override
-            public void failed(Exception e) {
-                Log.i(TAG, "FAILED THROW: " + e.getMessage());
-                isCardDetected = false;
-            }
-
-            @Override
-            public void completed() {
-                Log.i(TAG, "COMPLETED");
-                drawOverlay(mOverlayHolder);
-            }
-        });
+        final TextAnalyzer textAnalyzer = new TextAnalyzer(textResult, mCardMarkerRegion);
+        textAnalyzer.setTaskListener(textAnalyzerListener);
 
 
-        FaceAnalyzer faceAnalyzer = new FaceAnalyzer(
-                HEIGHT_CROP_PERCENT_FACE,
-                WIDTH_CROP_PERCENT_FACE);
-
-        faceAnalyzer.setTaskListener(new AnalyzerTaskListener<List<FirebaseVisionFace>>() {
-            @Override
-            public void successed(List<FirebaseVisionFace> var1) {
-                Log.i(TAG, "DETECTED FACE: " + var1.size());
-                isFaceDetected = !var1.isEmpty();
-            }
-
-            @Override
-            public void failed(Exception e) {
-                Log.i(TAG, "FAILED THROW: " + e.getMessage());
-                isFaceDetected = false;
-            }
-
-            @Override
-            public void completed() {
-                Log.i(TAG, "COMPLETED");
-                mMarker.getDrawable().setColorFilter(
-                        isFaceDetected ? Color.GREEN : Color.RED,
-                        PorterDuff.Mode.SRC_ATOP);
-            }
-        });
+        FaceAnalyzer faceAnalyzer = new FaceAnalyzer(mFaceMarkerRegion);
+        faceAnalyzer.setTaskListener(faceAnalyzerListener);
 
         mPreview.getAnalyzer().add(faceAnalyzer);
         mPreview.getAnalyzer().add(textAnalyzer);
@@ -114,7 +136,7 @@ public class TakeSelfieWithCardActivity extends AppCompatActivity {
     }
 
     void initIndicatorOverlay() {
-        mOverlay.setZOrderOnTop(true);
+//        mOverlay.setZOrderOnTop(true);
         mOverlay.getHolder().setFormat(PixelFormat.TRANSPARENT);
         mOverlay.getHolder().addCallback(new SurfaceHolder.Callback() {
             @Override
@@ -138,6 +160,10 @@ public class TakeSelfieWithCardActivity extends AppCompatActivity {
 
     private void drawOverlay(SurfaceHolder holder) {
         if (mOverlayHolder == null) return;
+
+        int cardStrokeColor = isCardDetected.getValue() ? Color.GREEN : Color.RED;
+        int faceStrokeColor = isFaceDetected.getValue() ? Color.GREEN : Color.RED;
+
         Canvas canvas = holder.lockCanvas();
 
         // clear previous canvas
@@ -148,35 +174,59 @@ public class TakeSelfieWithCardActivity extends AppCompatActivity {
         bgPaint.setAlpha(140);
         canvas.drawPaint(bgPaint);
 
-        // bg of inner region
+        // CARD: bg of inner region
         Paint rectPaint = new Paint();
         rectPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
         rectPaint.setStyle(Paint.Style.FILL);
+        rectPaint.setAntiAlias(true);
         rectPaint.setColor(Color.WHITE);
 
-        // stroke outline
+        // CARD: stroke outline
         Paint outlinePaint = new Paint();
         outlinePaint.setStyle(Paint.Style.STROKE);
-        outlinePaint.setColor(isCardDetected ? Color.GREEN : Color.RED);
+        outlinePaint.setColor(cardStrokeColor);
+        outlinePaint.setAntiAlias(true);
         outlinePaint.setPathEffect(new DashPathEffect(new float[]{30, 5}, 0));
         outlinePaint.setStrokeWidth(2f);
+
         int surfaceWidth = holder.getSurfaceFrame().width();
         int surfaceHeight = holder.getSurfaceFrame().height();
         float cornerRadius = 20f;
 
-        // Set rect centered in frame
-        float rectTop = surfaceHeight * HEIGHT_CROP_PERCENT_FACE / 2 / 100f;
-        float rectLeft = surfaceWidth * WIDTH_CROP_PERCENT_FACE / 2 / 100f;
-        float rectRight = surfaceWidth * (1 - WIDTH_CROP_PERCENT_FACE / 2 / 100f);
-        float rectBottom = surfaceHeight * (1 - HEIGHT_CROP_PERCENT_FACE / 2 / 100f);
+        // CARD: Set rect centered in frame
+        float rectTop = surfaceHeight * mCardMarkerRegion.HEIGHT_CROP_PERCENT / 2 / 100f;
+        float rectLeft = surfaceWidth * mCardMarkerRegion.WIDTH_CROP_PERCENT / 2 / 100f;
+        float rectRight = surfaceWidth * (1 - mCardMarkerRegion.WIDTH_CROP_PERCENT / 2 / 100f);
+        float rectBottom = surfaceHeight * (1 - mCardMarkerRegion.HEIGHT_CROP_PERCENT / 2 / 100f);
+
+
+        // FACE: add vertical offset
+        float VOffset = surfaceHeight / 2 * mCardMarkerRegion.VERTICAL_OFFSET_PERCENT / 100f;
+        rectTop += VOffset;
+        rectBottom += VOffset;
 
         RectF rect = new RectF(rectLeft, rectTop, rectRight, rectBottom);
-        canvas.drawRoundRect(
-                rect, cornerRadius, cornerRadius, rectPaint
-        );
-        canvas.drawRoundRect(
-                rect, cornerRadius, cornerRadius, outlinePaint
-        );
+        canvas.drawRoundRect(rect, cornerRadius, cornerRadius, rectPaint);
+        canvas.drawRoundRect(rect, cornerRadius, cornerRadius, outlinePaint);
+
+
+        // FACE: Set rect centered in frame
+        rectTop = surfaceHeight * mFaceMarkerRegion.HEIGHT_CROP_PERCENT / 2 / 100f;
+        rectLeft = surfaceWidth * mFaceMarkerRegion.WIDTH_CROP_PERCENT / 2 / 100f;
+        rectRight = surfaceWidth * (1 - mFaceMarkerRegion.WIDTH_CROP_PERCENT / 2 / 100f);
+        rectBottom = surfaceHeight * (1 - mFaceMarkerRegion.HEIGHT_CROP_PERCENT / 2 / 100f);
+
+        // FACE: add vertical offset
+        VOffset = surfaceHeight / 2 * mFaceMarkerRegion.VERTICAL_OFFSET_PERCENT / 100f;
+        rectTop += VOffset;
+        rectBottom += VOffset;
+
+        outlinePaint.setColor(faceStrokeColor);
+        RectF rectFace = new RectF(rectLeft, rectTop, rectRight, rectBottom);
+        canvas.drawOval(rectFace, rectPaint);
+        canvas.drawOval(rectFace, outlinePaint);
+
+
         holder.unlockCanvasAndPost(canvas);
     }
 
