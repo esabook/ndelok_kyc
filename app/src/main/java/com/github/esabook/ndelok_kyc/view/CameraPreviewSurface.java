@@ -1,4 +1,4 @@
-package com.github.esabook.idcardsubmission.view;
+package com.github.esabook.ndelok_kyc.view;
 
 import android.content.Context;
 import android.hardware.Camera;
@@ -7,14 +7,14 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import com.github.esabook.idcardsubmission.CameraUtils;
-import com.github.esabook.idcardsubmission.analyzer.AnalyzerBase;
+import com.github.esabook.ndelok_kyc.CameraUtils;
+import com.github.esabook.ndelok_kyc.analyzer.AnalyzerBase;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.github.esabook.idcardsubmission.CameraUtils.getCameraInstance;
+import static com.github.esabook.ndelok_kyc.CameraUtils.getCameraInstance;
 
 public class CameraPreviewSurface extends SurfaceView implements SurfaceHolder.Callback {
     public static final String TAG = CameraPreviewSurface.class.getSimpleName();

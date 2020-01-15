@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     tools:context=".activity.TakeCardActivity">
 
-    <com.github.esabook.idcardsubmission.view.CameraPreviewSurface
+    <com.github.esabook.ndelok_kyc.view.CameraPreviewSurface
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/camera"

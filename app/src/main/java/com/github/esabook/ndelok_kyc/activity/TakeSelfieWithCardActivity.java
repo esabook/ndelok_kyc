@@ -1,4 +1,4 @@
-package com.github.esabook.idcardsubmission.activity;
+package com.github.esabook.ndelok_kyc.activity;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -18,11 +18,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.MutableLiveData;
 
-import com.github.esabook.idcardsubmission.R;
-import com.github.esabook.idcardsubmission.analyzer.AnalyzerTaskListener;
-import com.github.esabook.idcardsubmission.analyzer.FaceAnalyzer;
-import com.github.esabook.idcardsubmission.analyzer.TextAnalyzer;
-import com.github.esabook.idcardsubmission.view.CameraPreviewSurface;
+import com.github.esabook.ndelok_kyc.R;
+import com.github.esabook.ndelok_kyc.analyzer.AnalyzerTaskListener;
+import com.github.esabook.ndelok_kyc.analyzer.FaceAnalyzer;
+import com.github.esabook.ndelok_kyc.analyzer.TextAnalyzer;
+import com.github.esabook.ndelok_kyc.view.CameraPreviewSurface;
 import com.google.firebase.ml.vision.face.FirebaseVisionFace;
 import com.google.firebase.ml.vision.text.FirebaseVisionText;
 

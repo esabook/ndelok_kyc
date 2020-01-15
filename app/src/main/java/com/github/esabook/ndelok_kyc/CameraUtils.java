@@ -1,4 +1,4 @@
-package com.github.esabook.idcardsubmission;
+package com.github.esabook.ndelok_kyc;
 
 import android.content.Context;
 import android.content.pm.PackageManager;

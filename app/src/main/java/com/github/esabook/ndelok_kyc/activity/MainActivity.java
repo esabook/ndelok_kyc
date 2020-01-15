@@ -1,4 +1,4 @@
-package com.github.esabook.idcardsubmission.activity;
+package com.github.esabook.ndelok_kyc.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,7 +7,7 @@ import android.view.View;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.github.esabook.idcardsubmission.R;
+import com.github.esabook.ndelok_kyc.R;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 

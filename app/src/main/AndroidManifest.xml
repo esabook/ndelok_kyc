@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.github.esabook.idcardsubmission">
+    package="com.github.esabook.ndelok_kyc">
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera" />
     <application
@@ -10,9 +10,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.TakeSelfieWithCardActivity"></activity>
-        <activity android:name=".activity.TakeCardActivity" />
-        <activity android:name=".activity.MainActivity">
+        <activity android:name="com.github.esabook.ndelok_kyc.activity.TakeSelfieWithCardActivity"></activity>
+        <activity android:name="com.github.esabook.ndelok_kyc.activity.TakeCardActivity" />
+        <activity android:name="com.github.esabook.ndelok_kyc.activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

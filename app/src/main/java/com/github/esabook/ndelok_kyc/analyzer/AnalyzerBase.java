@@ -1,4 +1,4 @@
-package com.github.esabook.idcardsubmission.analyzer;
+package com.github.esabook.ndelok_kyc.analyzer;
 
 import android.hardware.Camera;
 
