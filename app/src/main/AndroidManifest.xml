@@ -10,8 +10,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.github.esabook.ndelok_kyc.activity.TakeSelfieWithCardActivity"></activity>
-        <activity android:name="com.github.esabook.ndelok_kyc.activity.TakeCardActivity" />
+        <activity
+            android:name="com.github.esabook.ndelok_kyc.activity.TakeSelfieWithCardActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name="com.github.esabook.ndelok_kyc.activity.TakeCardActivity"
+            android:screenOrientation="portrait" />
         <activity android:name="com.github.esabook.ndelok_kyc.activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
