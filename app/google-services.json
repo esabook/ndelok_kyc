@@ -1,9 +1,9 @@
 {
   "project_info": {
     "project_number": "349664903667",
-    "firebase_url": "https://bareksa-revamp.firebaseio.com",
-    "project_id": "bareksa-revamp",
-    "storage_bucket": "bareksa-revamp.appspot.com"
+    "firebase_url": "https://esabook-kyc.firebaseio.com",
+    "project_id": "esabook-kyc",
+    "storage_bucket": "esabook-kyc.appspot.com"
   },
   "client": [
     {
