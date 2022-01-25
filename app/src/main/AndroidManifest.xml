@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.github.esabook.ndelok_kyc">
+
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera" />
     <application
@@ -12,11 +13,13 @@
         android:theme="@style/AppTheme">
         <activity
             android:name="com.github.esabook.ndelok_kyc.activity.TakeSelfieWithCardActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.github.esabook.ndelok_kyc.activity.TakeCardActivity"
             android:screenOrientation="portrait" />
-        <activity android:name="com.github.esabook.ndelok_kyc.activity.MainActivity">
+        <activity
+            android:name="com.github.esabook.ndelok_kyc.activity.MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

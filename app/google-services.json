@@ -1,92 +1,34 @@
 {
   "project_info": {
-    "project_number": "349664903667",
-    "firebase_url": "https://esabook-kyc.firebaseio.com",
-    "project_id": "esabook-kyc",
-    "storage_bucket": "esabook-kyc.appspot.com"
+    "project_number": "654534043372",
+    "firebase_url": "https://speech-recognition-egit.firebaseio.com",
+    "project_id": "speech-recognition-egit",
+    "storage_bucket": "speech-recognition-egit.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:349664903667:android:32cc2f6ce657439d5a1286",
+        "mobilesdk_app_id": "1:654534043372:android:9b6fcc467d706ebe5ba7c9",
         "android_client_info": {
-          "package_name": "com.github.esabook.idcardsubmission"
+          "package_name": "com.github.esabook.ndelok_kyc"
         }
       },
       "oauth_client": [
         {
-          "client_id": "349664903667-n5eftmnjsd5t9b7nbcs7tohl1677j9hv.apps.googleusercontent.com",
+          "client_id": "654534043372-q8n0mqbo4j4ehcfnb1ff8s4mfhbg0rul.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBIAeRVAzY9z-A8JhHtxjrjCDtoaOYDuDs"
+          "current_key": "AIzaSyCnjAF9Iijl0-ysAjF8yy_BhcL5KWKteoU"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "349664903667-n5eftmnjsd5t9b7nbcs7tohl1677j9hv.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:349664903667:android:4e49ff6e72948af25a1286",
-        "android_client_info": {
-          "package_name": "com.google.android.samples.dynamicfeatures"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "349664903667-n5eftmnjsd5t9b7nbcs7tohl1677j9hv.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBIAeRVAzY9z-A8JhHtxjrjCDtoaOYDuDs"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "349664903667-n5eftmnjsd5t9b7nbcs7tohl1677j9hv.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:349664903667:android:8b55c2982e649cf15a1286",
-        "android_client_info": {
-          "package_name": "com.google.firebase.mlkit.codelab.translate"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "349664903667-n5eftmnjsd5t9b7nbcs7tohl1677j9hv.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBIAeRVAzY9z-A8JhHtxjrjCDtoaOYDuDs"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "349664903667-n5eftmnjsd5t9b7nbcs7tohl1677j9hv.apps.googleusercontent.com",
+              "client_id": "654534043372-q8n0mqbo4j4ehcfnb1ff8s4mfhbg0rul.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
