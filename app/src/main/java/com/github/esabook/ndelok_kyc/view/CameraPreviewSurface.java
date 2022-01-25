@@ -2,6 +2,7 @@ package com.github.esabook.ndelok_kyc.view;
 
 import android.content.Context;
 import android.hardware.Camera;
+import android.hardware.Camera.Parameters;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -93,31 +94,21 @@ public class CameraPreviewSurface extends SurfaceView implements SurfaceHolder.C
     }
 
     void initCameraConfig() {
-        Camera.Parameters cp = mCamera.getParameters();
+        Parameters cp = mCamera.getParameters();
         cp.setRotation(CAMERA_ORIENTATION);
-        cp.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+
+        List<String> availFocusModes = cp.getSupportedFocusModes();
+        if (availFocusModes.contains(Parameters.FOCUS_MODE_CONTINUOUS_PICTURE))
+            cp.setFocusMode(Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+        else if (availFocusModes.contains(Parameters.FOCUS_MODE_AUTO))
+            cp.setFocusMode(Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
 
         mCamera.setParameters(cp);
-//        mCamera.setFaceDetectionListener(new Camera.FaceDetectionListener() {
-//            @Override
-//            public void onFaceDetection(Camera.Face[] faces, Camera camera) {
-//
-//                Log.d(TAG, "Face total: " + String.valueOf(faces.length));
-//
-//                for (Camera.Face f : faces) {
-//                    Log.d(TAG, "Face score: " + String.valueOf(f.score));
-//                }
-//            }
-//        });
+        mCamera.setPreviewCallback((data, camera) -> {
+            // send preview data to subscriber
+            for (AnalyzerBase p : getAnalyzer())
+                p.analyze(data, camera, CAMERA_ORIENTATION);
 
-        mCamera.setPreviewCallback(new Camera.PreviewCallback() {
-            @Override
-            public void onPreviewFrame(byte[] data, Camera camera) {
-                // send preview data to subscriber
-                for (AnalyzerBase p : getAnalyzer())
-                    p.analyze(data, camera, CAMERA_ORIENTATION);
-
-            }
         });
 
     }
